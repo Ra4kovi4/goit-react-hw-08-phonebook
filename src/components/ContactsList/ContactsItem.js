@@ -4,7 +4,7 @@ export const ContactsItems = ({ name, number, onDelete }) => {
   return (
     <>
       <Name children={name} />
-      <PhoneLink children={number} />
+      <PhoneLink href="tel:{number}" children={number} />
 
       <Button type="button" onClick={() => onDelete(name)} children="delete" />
     </>
