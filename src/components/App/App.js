@@ -93,7 +93,7 @@ export class App extends Component {
         ) : (
           <h2>Please add the contact to your phonebook</h2>
         )}
-        {filterList.length === 0 ? (
+        {filterList.length === 0 && contacts.length !== 0 ? (
           <p>There is no such contact in your phonebook</p>
         ) : (
           <ContactsList
