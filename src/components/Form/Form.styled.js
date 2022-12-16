@@ -48,6 +48,10 @@ export const Button = styled.button`
   font-weight: 600;
   cursor: pointer;
   box-shadow: 12px 10px 17px -3px rgba(51, 46, 51, 0.71);
+  :hover,
+  :focus {
+    background-color: #1e90ff;
+  }
 `;
 export const Error = styled(ErrorMessage)`
   width: 100%;
