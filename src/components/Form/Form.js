@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone';
@@ -12,6 +10,11 @@ import {
   PersonIcon,
   PhoneIcon,
 } from './Form.styled';
+import { Report } from 'notiflix/build/notiflix-report-aio';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
+import { getContacts } from 'redux/selectors';
+import { useSelector } from 'react-redux';
 
 const initialValues = {
   name: '',
@@ -26,9 +29,33 @@ const SignupSchema = Yup.object().shape({
     .required(),
 });
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  //Сабмит формы
   const handleSubmit = (values, { resetForm }) => {
-    onSubmit(values);
+    const { name, number } = values;
+
+    //Проверка на повторение имени и номера телефона в контактах
+    const isIncludeName = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    const isIncludeNumber = contacts.some(
+      contact => contact.number.toLowerCase() === number.toLowerCase()
+    );
+
+    if (isIncludeName) {
+      resetForm();
+      return Report.failure('', `${name} is already in contact`);
+    } else if (isIncludeNumber) {
+      resetForm();
+      const { name } = contacts.find(contact => contact.number === number);
+      return Report.failure('', `${number} is already in contact as ${name}`);
+    }
+
+    //Добавление нового контакта
+    dispatch(addContact(name, number));
     resetForm();
   };
 
@@ -55,8 +82,4 @@ export const ContactForm = ({ onSubmit }) => {
       </SearchForma>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
