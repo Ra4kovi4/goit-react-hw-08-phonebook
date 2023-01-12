@@ -9,11 +9,23 @@ export const Name = styled.p`
 `;
 
 export const PhoneLink = styled.a`
-  display: inline-block;
-  color: blue;
-  font-size: 20px;
-  text-decoration: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 40px;
+  background-color: firebrick;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 12px 10px 17px -3px rgba(51, 46, 51, 0.71);
+  :hover,
+  :focus {
+    background-color: red;
+  }
 `;
+
 export const Button = styled.button`
   display: block;
   margin-left: auto;
