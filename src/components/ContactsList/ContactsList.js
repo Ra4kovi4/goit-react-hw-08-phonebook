@@ -1,18 +1,20 @@
 import { ContactsItems } from './ContactsItem';
-import { Item } from './ContactList.styled';
+import { FailedMessage, Item } from './ContactList.styled';
 import { useSelector } from 'react-redux';
 import { selectFilteredContact } from 'redux/selectors';
 
 export const ContactsList = () => {
-  const contacts = useSelector(selectFilteredContact);
+  const filteredContacts = useSelector(selectFilteredContact);
 
   return (
     <>
-      {contacts.length === 0 ? (
-        <p>There is no such contact in your phonebook</p>
+      {filteredContacts.length === 0 ? (
+        <FailedMessage>
+          There is no such contact in your phonebook
+        </FailedMessage>
       ) : (
         <ul>
-          {contacts.map(({ id, name, number }) => (
+          {filteredContacts.map(({ id, name, number }) => (
             <Item key={id}>
               <ContactsItems id={id} name={name} number={number} />
             </Item>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Name, PhoneLink, Button } from './ContactItems.styled';
+import { Name, Number, Button } from './ContactItems.styled';
 import { useDispatch } from 'react-redux';
 import { deleteContact } from 'redux/operations';
 
@@ -9,11 +9,8 @@ export const ContactsItems = ({ id, name, number }) => {
 
   return (
     <>
-      <Name>
-        {name}: {number}
-      </Name>
-      <PhoneLink href="tel:{number}">call</PhoneLink>
-
+      <Name>{name}:</Name>
+      <Number>{number}</Number>
       <Button type="button" onClick={handlerDelete}>
         delete
       </Button>

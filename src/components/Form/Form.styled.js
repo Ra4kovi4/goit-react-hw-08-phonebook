@@ -50,7 +50,9 @@ export const Button = styled.button`
   box-shadow: 12px 10px 17px -3px rgba(51, 46, 51, 0.71);
   :hover,
   :focus {
-    background-color: #1e90ff;
+    background-color: white;
+    color: blue;
+    border-color: blue;
   }
 `;
 export const Error = styled(ErrorMessage)`

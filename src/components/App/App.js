@@ -32,7 +32,7 @@ export const App = () => {
       )}
       {isLoading ? Loading.dots() : Loading.remove()}
       {error && <p>Oops, something went wrong...Please try again</p>}
-      <ContactsList />
+      {contacts.length !== 0 && <ContactsList />}
       <GlobalStyle />
     </Container>
   );
