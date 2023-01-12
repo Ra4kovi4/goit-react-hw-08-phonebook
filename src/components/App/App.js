@@ -1,14 +1,24 @@
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import { Container } from './App.styled';
 import { ContactForm } from '../Form/Form';
 import { ContactsList } from '../ContactsList/ContactsList';
 import { Filter } from '../Filter/Filter';
 import { GlobalStyle } from 'constants/GlobalStyle';
-import { getContacts } from 'redux/selectors';
+import { selectContacts, selectLoader, selectError } from 'redux/selectors';
 import { useSelector } from 'react-redux';
-// const LS_KEY = 'contacts';
+import { fetchContacts } from 'redux/operations';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectLoader);
+  const error = useSelector(selectError);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <Container>
@@ -20,9 +30,9 @@ export const App = () => {
       ) : (
         <h2>Please add the contact to your phonebook</h2>
       )}
-
+      {isLoading ? Loading.dots() : Loading.remove()}
+      {error && <p>Oops, something went wrong...Please try again</p>}
       <ContactsList />
-
       <GlobalStyle />
     </Container>
   );

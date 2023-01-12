@@ -12,8 +12,8 @@ import {
 } from './Form.styled';
 import { Report } from 'notiflix/build/notiflix-report-aio';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
-import { getContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
+import { selectContacts } from 'redux/selectors';
 import { useSelector } from 'react-redux';
 
 const initialValues = {
@@ -31,7 +31,7 @@ const SignupSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   //Сабмит формы
   const handleSubmit = (values, { resetForm }) => {
@@ -55,7 +55,7 @@ export const ContactForm = () => {
     }
 
     //Добавление нового контакта
-    dispatch(addContact(name, number));
+    dispatch(addContact(values));
     resetForm();
   };
 

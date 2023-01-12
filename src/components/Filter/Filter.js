@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux';
 import { setFilter } from 'redux/filtersSlice';
 import { FilterLabel, FilterInput, SearchIcon } from './Filter.styled';
-import { getFilters } from 'redux/selectors';
+import { selectFilters } from 'redux/selectors';
 import { useSelector } from 'react-redux';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilters);
+  const filter = useSelector(selectFilters);
   const handlerFilter = e => dispatch(setFilter(e.target.value));
   return (
     <FilterLabel htmlFor="filter">
