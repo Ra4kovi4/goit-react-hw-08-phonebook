@@ -41,9 +41,7 @@ export const ContactForm = () => {
     const isIncludeName = contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
-    const isIncludeNumber = contacts.some(
-      contact => contact.number.toLowerCase() === number.toLowerCase()
-    );
+    const isIncludeNumber = contacts.some(contact => contact.number === number);
 
     if (isIncludeName) {
       resetForm();
