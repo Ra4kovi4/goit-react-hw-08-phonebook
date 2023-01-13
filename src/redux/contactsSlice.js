@@ -7,8 +7,10 @@ const fetchContactsFuldilledReducer = (state, action) => {
 const addContactsFulfilledReducer = (state, action) => {
   state.items = [...state.items, action.payload];
 };
-const ddeleteContactsFulfilledReducer = (state, action) => {
-  const index = state.items.findIndex(contact => contact.id === action.payload);
+const deleteContactsFulfilledReducer = (state, action) => {
+  const index = state.items.findIndex(
+    contact => contact.id === action.payload.id
+  );
   state.items.splice(index, 1);
 };
 const extraActions = [fetchContacts, addContact, deleteContact];
@@ -38,7 +40,7 @@ const contactsSlise = createSlice({
 
       .addCase(fetchContacts.fulfilled, fetchContactsFuldilledReducer)
       .addCase(addContact.fulfilled, addContactsFulfilledReducer)
-      .addCase(deleteContact.fulfilled, ddeleteContactsFulfilledReducer)
+      .addCase(deleteContact.fulfilled, deleteContactsFulfilledReducer)
       .addMatcher(isAnyOf(...getExtraActions('pending')), anyPendingReducer)
       .addMatcher(isAnyOf(...getExtraActions('fulfilled')), anyFulfilledReducer)
       .addMatcher(isAnyOf(...getExtraActions('rejected')), anyRejectedReducer),
