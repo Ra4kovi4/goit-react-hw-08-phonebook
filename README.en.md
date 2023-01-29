@@ -8,4 +8,4 @@ phone book will display the following menu and support corresponding functions:
 
 -Application sign-un form -Application sign-in form -Homepage -Contacts list
 page, where the functionality of adding, deleting and updating contacts is
-implemented
+implemented.
