@@ -1,39 +1,86 @@
-import { Loading } from 'notiflix/build/notiflix-loading-aio';
-import { Container } from './App.styled';
-import { ContactForm } from '../Form/Form';
-import { ContactsList } from '../ContactsList/ContactsList';
-import { Filter } from '../Filter/Filter';
-import { GlobalStyle } from 'constants/GlobalStyle';
-import { selectContacts, selectLoader, selectError } from 'redux/selectors';
-import { useSelector } from 'react-redux';
-import { fetchContacts } from 'redux/operations';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
+import { ThemeProvider } from '@mui/system';
+import { useEffect, lazy, useState, useMemo } from 'react';
+import { Loading } from 'notiflix';
+import { useAuth } from '../../hooks/useAuth';
+import { Routes, Route } from 'react-router-dom';
+import { getDesignTokens } from '../../constants/theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { CssBaseline, createTheme } from '@mui/material';
+import { Layout } from '../Layout/Layout';
+import { RestrictedRoute } from '../RestrictedRoute';
+import { PrivateRoute } from '../PrivateRouter';
+import { refreshUser } from 'redux/auth/authOperation';
+import { selectApplicationTheme } from 'redux/theme/themeSelector';
+
+const HomePage = lazy(() => import('../pages/Home'));
+const RegistraitionPage = lazy(() => import('../pages/Register'));
+const LoginPage = lazy(() => import('../pages/LoginPage'));
+const ContactsPage = lazy(() => import('../pages/Contacts'));
 
 export const App = () => {
-  const contacts = useSelector(selectContacts);
-  const isLoading = useSelector(selectLoader);
-  const error = useSelector(selectError);
-  const dispatch = useDispatch();
+  const [mode, setMode] = useState('light');
+  const darkMode = useSelector(selectApplicationTheme);
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    if (darkMode) {
+      setMode('dark');
+    } else {
+      setMode('light');
+    }
+  }, [darkMode]);
+
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
+  const dispatch = useDispatch();
+  const { isRefreshing } = useAuth();
+
+  useEffect(() => {
+    dispatch(refreshUser());
   }, [dispatch]);
 
   return (
-    <Container>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      {contacts.length !== 0 && <Filter />}
-      {contacts.length !== 0 ? (
-        <h2>Contacts</h2>
-      ) : (
-        <h2>Please add the contact to your phonebook</h2>
-      )}
-      {isLoading ? Loading.dots() : Loading.remove()}
-      {error && <p>Oops, something went wrong...Please try again</p>}
-      {contacts.length !== 0 && <ContactsList />}
-      <GlobalStyle />
-    </Container>
+    <>
+      <ThemeProvider theme={theme}>
+        <HelmetProvider>
+          <CssBaseline />
+          {isRefreshing ? Loading.pulse() : Loading.remove()}
+          {!isRefreshing && (
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route
+                  path="/signup"
+                  element={
+                    <RestrictedRoute
+                      redirectTo={'/contacts'}
+                      component={<RegistraitionPage />}
+                    />
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <RestrictedRoute
+                      redirectTo={'/contacts'}
+                      component={<LoginPage />}
+                    />
+                  }
+                />
+                <Route
+                  path="/contacts"
+                  element={
+                    <PrivateRoute
+                      redirectTo={'/login'}
+                      component={<ContactsPage />}
+                    />
+                  }
+                />
+              </Route>
+            </Routes>
+          )}
+        </HelmetProvider>
+      </ThemeProvider>
+    </>
   );
 };
