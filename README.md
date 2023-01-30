@@ -10,4 +10,4 @@ You can add new contact entries, display all already saved contact entries. The 
 
 - Homepage 
 
-- Contacts list page, where the functionality of adding, deleting and updating contacts is implemented.
+- Contact list page with the functionality to add, delete and update and filter your contacts
